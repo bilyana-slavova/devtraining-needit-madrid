@@ -5,20 +5,20 @@
         <action_delete>false</action_delete>
         <action_insert>true</action_insert>
         <action_query>false</action_query>
-        <action_update>false</action_update>
-        <active>false</active>
+        <action_update>true</action_update>
+        <active>true</active>
         <add_message>false</add_message>
         <advanced>true</advanced>
         <change_fields>false</change_fields>
         <client_callable>false</client_callable>
-        <collection>incident</collection>
+        <collection>x_58872_needit_needit</collection>
         <condition/>
-        <description/>
+        <description>Lists open NeedIt requests for the user in the Requested for field</description>
         <execute_function>false</execute_function>
         <filter_condition/>
         <is_rest>false</is_rest>
         <message/>
-        <name>List Open Incidents by Same Caller</name>
+        <name>Lists open NeedIt requests for User</name>
         <order>100</order>
         <priority>100</priority>
         <rest_method/>
@@ -28,46 +28,37 @@
         <rest_variables/>
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	var grNeedIt = new GlideRecord('x_58872_needit_needit');
 	
-	// 1. Create an object to store rows from a table
-	var grIncident = new GlideRecord('incident');
+	grNeedIt.addQuery('active','=',true);
+	grNeedIt.addQuery('u_requested_for', '=', current.u_requested_for);
+	grNeedIt.query();
 	
-	// 2. Build query
-	grIncident.addQuery('active','=',true);
-	grIncident.addQuery('caller_id','=',current.caller_id);
-	
-	// 3. Execute query
-	grIncident.query();
-	
-	// Initialize message to list Caller's active Incidents
-	var msg = "Caller's other active incidents: ";
-	
-	// 4. Process returned records
-	while(grIncident.next()){
-		// add a new line to the message for each of the Caller's active Incidents
-		msg = msg + grIncident.getValue('number') + ": " + grIncident.getValue('short_description') + " | ";
+	var msg = "Open Requests created by same Requester: ";
+	while(grNeedIt.next()){
+		msg = msg + 'Number: ' + grNeedIt.getValue('number') + ' Description: ' + grNeedIt.getValue('short_description') + '|';
 	}
 	
 	gs.addInfoMessage(msg);
-	
 })(current, previous);]]></script>
         <sys_class_name>sys_script</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2019-07-09 11:41:11</sys_created_on>
+        <sys_created_on>2019-07-10 07:12:12</sys_created_on>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
-        <sys_id>6a87af11dbe23300e095cc30399619c5</sys_id>
-        <sys_mod_count>1</sys_mod_count>
-        <sys_name>List Open Incidents by Same Caller</sys_name>
+        <sys_id>c9e2bb65db223300e095cc3039961980</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>Lists open NeedIt requests for User</sys_name>
         <sys_overrides/>
         <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
         <sys_policy/>
         <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
-        <sys_update_name>sys_script_6a87af11dbe23300e095cc30399619c5</sys_update_name>
+        <sys_update_name>sys_script_c9e2bb65db223300e095cc3039961980</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-07-10 09:02:01</sys_updated_on>
+        <sys_updated_on>2019-07-10 07:27:50</sys_updated_on>
         <template/>
         <when>before</when>
     </sys_script>
-    <sys_translated_text action="delete_multiple" query="documentkey=6a87af11dbe23300e095cc30399619c5"/>
+    <sys_translated_text action="delete_multiple" query="documentkey=c9e2bb65db223300e095cc3039961980"/>
 </record_update>
